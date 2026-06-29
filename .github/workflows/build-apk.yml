@@ -11,12 +11,12 @@ steps:
 with:
 istribution: temurin
 java-version: '17'
-- uses: android-actions/setup-android@v3
-- uses: gradle/actions/setup-gradle@v3
+-uses: android-actions/setup-android@v3
+-uses: gradle/actions/setup-gradle@v3
 with:
 gradle-version: '8.7'
-- run: gradle assembleDebug --no-daemon
-- uses: actions/upload-artifact@v4
+-run: gradle assembleDebug --no-daemon
+-uses: actions/upload-artifact@v4
 with:
 name: RentlisGroop-app-debug-apk
 path: app/build/outputs/apk/debug/app-debug.apk
