@@ -200,7 +200,7 @@
   .d-hero.hasimg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 30%,rgba(0,0,0,.6));}
   .d-hero .ov{position:relative;z-index:3;color:#fff;}.d-hero:not(.hasimg) .ov{color:var(--ink);}
   .d-icbtn{position:absolute;top:16px;width:42px;height:42px;border-radius:14px;background:rgba(16,17,20,.28);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;color:#fff;cursor:pointer;z-index:5;}.d-icbtn svg{width:20px;height:20px;}
-  .d-back{left:16px;}.d-cam{right:16px;}
+  .d-back{left:16px;}.d-cam{right:16px;}.d-edit{right:68px;}
   .d-title .t{font-size:23px;font-weight:800;letter-spacing:-.5px;}
   .d-title .a{font-size:13px;font-weight:600;opacity:.85;margin-top:4px;display:flex;align-items:center;gap:5px;}.d-title .a svg{width:14px;height:14px;}
   .d-body{padding:18px 20px;}
@@ -281,6 +281,9 @@
   .pyc:active{transform:scale(.96);}
   .logo-hint{font-size:12px;font-weight:700;color:var(--gold);margin-top:8px;cursor:pointer;}
   .prof-av{cursor:pointer;overflow:hidden;}
+  .rate-line{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--muted);background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:8px 12px;margin:-6px 0 14px;cursor:pointer;}.rate-line b{color:var(--gold);}.rate-line svg{width:14px;height:14px;color:var(--gold);}
+  .remain{display:flex;justify-content:space-between;align-items:center;margin-top:10px;padding-top:10px;border-top:1px solid var(--line);font-size:13px;font-weight:700;cursor:pointer;}.remain b{font-size:17px;color:var(--gold);}
+  .fld .hint{font-size:11px;color:var(--muted);margin-top:5px;}
   .finfilter{display:flex;align-items:center;justify-content:space-between;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:14px;cursor:pointer;font-size:13.5px;font-weight:700;}
   .finfilter span{display:flex;align-items:center;gap:8px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .finfilter svg{width:17px;height:17px;color:var(--gold);flex:0 0 auto;}
@@ -509,7 +512,7 @@
     .nav{bottom:calc(14px + var(--sab));left:calc(14px + var(--sal));right:calc(14px + var(--sar));}
     .d-hero{height:calc(310px + var(--sat));}
     .d-icbtn{top:calc(16px + var(--sat));}
-    .d-back{left:calc(16px + var(--sal));}.d-cam{right:calc(16px + var(--sar));}
+    .d-back{left:calc(16px + var(--sal));}.d-cam{right:calc(16px + var(--sar));}.d-edit{right:calc(68px + var(--sar));}
     .d-cta{padding-bottom:calc(18px + var(--sab));padding-left:calc(20px + var(--sal));padding-right:calc(20px + var(--sar));}
     .sheet{padding-bottom:var(--sab);}
   }
@@ -604,6 +607,11 @@ var DICT={
   language:"Language",theme:"Theme",light:"Light",dark:"Dark",invoice:"Rent invoice",save:"Save",delete:"Delete",deleteObject:"Delete object",cancel:"Cancel",addObject:"New object",type:"Object type",startYear:"Start year",amount:"Amount",paid:"Paid",notPaid:"Unpaid",
   invoiceTitle:"INVOICE",invObject:"Object",invTenant:"Tenant",invPeriod:"Period",invTax:"incl. tax",invAmount:"Amount due",invPaid:"PAID",print:"Print / PDF",uploadComplex:"Complex photo",wallpaper:"Apartment photo"}
 };
+(function(){var X={
+ ru:{rate:"Курс EUR → MDL",rateHint:"Сколько лей за 1 €. Курс сохраняется и используется во всех пересчётах.",rateUpd:"обновлён",remaining:"Осталось выплатить",remainingHint:"Если часть уже оплачена до приложения — укажите остаток. Пусто — считать от суммы сделки.",paidSoFar:"Уже оплачено",editObject:"Редактировать объект",dateErr:"Дата в формате дд.мм.гггг",remainBuild:"Осталось по стройкам"},
+ ro:{rate:"Curs EUR → MDL",rateHint:"Câți lei pentru 1 €. Cursul se salvează și se folosește la toate conversiile.",rateUpd:"actualizat",remaining:"Rămas de achitat",remainingHint:"Dacă o parte e deja achitată, indicați restul. Gol — se calculează din suma tranzacției.",paidSoFar:"Achitat deja",editObject:"Editează obiectul",dateErr:"Data în format zz.ll.aaaa",remainBuild:"Rămas la construcții"},
+ en:{rate:"EUR → MDL rate",rateHint:"How many lei per €1. The rate is saved and used for all conversions.",rateUpd:"updated",remaining:"Left to pay",remainingHint:"If part was paid before, enter what is left. Empty — calculated from the deal amount.",paidSoFar:"Paid so far",editObject:"Edit object",dateErr:"Date as dd.mm.yyyy",remainBuild:"Left to pay on construction"}
+};for(var l in X)for(var k in X[l])DICT[l][k]=X[l][k];})();
 function t(k){return (DICT[S.lang]&&DICT[S.lang][k])||DICT.ru[k]||k;}
 
 /* ---------- icons ---------- */
@@ -646,7 +654,7 @@ function buildPeriods(first,a,total,paidN){var pr=first.split("."),d=+pr[0],mo=+
 function emptyYears(sy){var h={};sy=sy||CUR_Y;for(var y=sy;y<=CUR_Y;y++)h[y]={};return h;}
 function mkRent(o){return {id:o.id,type:o.type,title:o.title,district:o.district,addr:o.addr,area:o.area,rent:o.rent,purchase:o.purchase,market:o.market,status:o.status,tenant:o.status==="ok"?{name:o.tn,citizenship:o.tc}:null,utils:o.utils,repair:o.repair,startDate:o.start,payDay:o.payDay,tax:{on:true,manual:null,cur:"EUR",pct:7},wall:null,complex:null,note:"",payDates:{},pay:emptyYears(parseInt(o.start.split(".")[2]))};}
 
-var S={cur:"EUR",lang:(function(){var l=((navigator.language||"ru")+"").toLowerCase().slice(0,2);return l==="ro"||l==="en"?l:"ru";})(),theme:"dark",logo:null,homeBg:null,notif:true,schedule:[],notes:[],tasks:[],shareholders:[],expenses:[],props:[]};
+var S={cur:"EUR",rate:19.2,rateDate:null,lang:(function(){var l=((navigator.language||"ru")+"").toLowerCase().slice(0,2);return l==="ro"||l==="en"?l:"ru";})(),theme:"dark",logo:null,homeBg:null,notif:true,schedule:[],notes:[],tasks:[],shareholders:[],expenses:[],props:[]};
 
 /* ---------- persistence (localStorage) ---------- */
 var LSKEY="rentlis_groop_v2";
@@ -662,6 +670,7 @@ function importText(txt){try{var o=JSON.parse(txt);if(!o||typeof o!=="object"||A
 function importData(file){var r=new FileReader();r.onload=function(){importText(r.result);};r.readAsText(file);}
 function resetData(){try{localStorage.removeItem(LSKEY);}catch(e){}location.reload();}
 load();
+if(!(parseFloat(S.rate)>0))S.rate=19.2;RATE=parseFloat(S.rate);
 
 /* ---------- helpers ---------- */
 function el(id){return document.getElementById(id);}
@@ -672,6 +681,14 @@ function initials(n){var p=(n||"").trim().split(" ");return ((p[0]?p[0][0]:"")+(
 function byId(id){for(var i=0;i<S.props.length;i++)if(S.props[i].id===id)return S.props[i];return null;}
 function rentProps(){return S.props.filter(function(p){return p.type!=="construction";});}
 function investProps(){return S.props.filter(function(p){return p.type==="construction";});}
+function instPaid(p){var s=0;(p.periods||[]).forEach(function(x){if(x.paid)s+=x.amount||0;});return s;}
+function paidTotalOf(p){return (p.paidBefore||0)+instPaid(p);}
+function remainingOf(p){return Math.max(0,(p.dealAmount||0)-paidTotalOf(p));}
+function isDate(v){return /^\d{1,2}\.\d{1,2}\.\d{4}$/.test(String(v||"").trim());}
+function planPeriods(first,mon,rem,offset){offset=offset||0;if(!(mon>0))return rem>0?buildPeriods(first,rem,1,0):[];var n=Math.max(1,Math.ceil(rem/mon-1e-9)),all=buildPeriods(first,mon,offset+n,0).slice(offset);if(all.length)all[all.length-1].amount=Math.round((rem-mon*(n-1))*100)/100;return all;}
+function rateTxt(){return (Math.round(RATE*100)/100).toFixed(2).replace(".",",");}
+function rateSheet(back){openSheet(t("rate"),'<div class="fld"><label>1 € = … MDL</label><input type="number" inputmode="decimal" step="0.01" min="0" id="rateV" value="'+RATE+'"><div class="hint">'+t("rateHint")+(S.rateDate?' · '+t("rateUpd")+' '+esc(S.rateDate):'')+'</div></div><button class="sh-save" id="rateS">'+t("save")+'</button>');
+ var inp=el("rateV");el("rateS").onclick=function(){var v=parseFloat(String(inp.value).replace(",","."));if(!(v>0)){inp.style.borderColor="var(--red)";return;}S.rate=Math.round(v*10000)/10000;RATE=S.rate;S.rateDate=pad(DEMO_DAY)+"."+pad(CUR_M)+"."+CUR_Y;save();renderAll();if(back)back();else closeSheet();};}
 function portfolioValue(){var s=0;S.props.forEach(function(p){s+=(p.market||0);});return s;}
 function investedAmount(){var s=0;S.props.forEach(function(p){s+=(p.purchase||p.dealAmount||0);});return s;}
 function monthIncome(){var s=0;S.props.forEach(function(p){if(p.pay&&p.pay[CUR_Y]&&p.pay[CUR_Y][CUR_M])s+=p.pay[CUR_Y][CUR_M];});return s;}
@@ -842,6 +859,7 @@ function renderFinance(){
  var expRows=exps.map(function(e){var ki=kindInfo(e.kind),pr=e.propId?byId(e.propId):null;return '<div data-exp="'+e.id+'" style="cursor:pointer;">'+flowRow(ki[0],"rgba(227,109,93,.14)","var(--red)",ki[1]+(e.note?" · "+esc(e.note):""),(pr?esc(pr.title):t("generalObj"))+" · "+pad(e.m)+"."+e.y,"-"+money(expEur(e)),"minus")+'</div>';}).join("");
  el("fin").innerHTML=
  '<div class="head stagger"><div class="hi">'+t("finance")+'<b>'+(month?t("incomeMonth"):t("incomeYear"))+'</b></div>'+curToggle()+'</div>'
+ +'<div class="rate-line stagger" id="finRate">'+svg(I.coins)+'1 € = <b>'+rateTxt()+' L</b>'+svg(I.edit)+'</div>'
  +'<div class="perbar stagger"><div class="pb-nav"><button id="perPrev">'+svg('<path d="M15 18l-6-6 6-6"/>',2.4)+'</button><b>'+label+'</b><button id="perNext">'+svg('<path d="M9 18l6-6-6-6"/>',2.4)+'</button></div><div class="seg" id="perMode"><button data-pm="month" class="'+(month?"on":"")+'">'+t("periodMonth")+'</button><button data-pm="year" class="'+(month?"":"on")+'">'+t("periodYear")+'</button></div></div>'
  +'<div class="finfilter stagger" id="finFilter"><span>'+svg(I.grid)+' '+finSelLabel()+'</span>'+svg('<path d="M6 9l6 6 6-6"/>')+'</div>'
  +'<div class="card stagger"><div class="legend"><div><div style="font-size:12px;color:var(--muted);font-weight:600;margin-bottom:4px;">'+(month?t("incomeMonth"):t("incomeByYears"))+' · '+label+'</div><div class="v">'+money(cur.gross)+'</div></div>'+(chg===null?'':'<div class="up" style="'+(chg<0?"color:var(--red);background:rgba(227,109,93,.14)":"")+'">'+(chg>=0?"▲ +":"▼ ")+chg+'%</div>')+'</div><div class="bars" id="bars">'+bars+'</div></div>'
@@ -851,6 +869,7 @@ function renderFinance(){
    +'<div class="invb"><b>'+moneyShort(mv)+'</b><span>'+t("currentValue")+'</span><div class="gr">▲ '+growth+'% '+t("capGrowth")+'</div></div>'
    +'<div class="invb"><b>'+payback+'%</b><span>'+t("payback")+'</span></div>'
  +'</div>'
+ +(function(){var rb=0,n=0;ps.forEach(function(p){if(p.type==="construction"){rb+=remainingOf(p);n++;}});return n?'<div class="invb stagger" style="margin-top:10px;display:flex;justify-content:space-between;align-items:center;text-align:left;padding:14px 16px;"><span style="font-size:12.5px;font-weight:700;">'+t("remainBuild")+'</span><b style="color:var(--gold);">'+money(rb)+'</b></div>':'';})()
  +'<div class="sec stagger"><h3>'+t("cashflow")+'</h3><a id="addExp">+ '+t("addExpense")+'</a></div>'
  +'<div class="card stagger" style="padding:6px 18px;">'
    +flowRow(I.zap,"rgba(46,204,113,.12)","var(--green)",t("rentPayments"),label,"+"+money(cur.gross),"plus")
@@ -862,7 +881,7 @@ function renderFinance(){
    +'<div style="text-align:right;font-size:12px;font-weight:700;">'+t("margin")+'<br><span style="font-size:20px;">'+(cur.gross?Math.round(cur.net/cur.gross*100):0)+'%</span></div></div>'
  +payReminderCard();
  wireCur();
- el("finFilter").onclick=objectFilterSheet;
+ el("finFilter").onclick=objectFilterSheet;el("finRate").onclick=function(){rateSheet();};
  el("addExp").onclick=function(){editExpense(null);};
  el("fin").querySelectorAll("[data-exp]").forEach(function(r){r.onclick=function(){editExpense(+this.getAttribute("data-exp"));};});
  el("perMode").querySelectorAll("button").forEach(function(b){b.onclick=function(){finMode=this.getAttribute("data-pm");renderFinance();};});
@@ -969,10 +988,11 @@ function renderDetail(){var p=byId(curId);if(!p)return;
  var price=p.type==="construction"?moneyShort(p.monthly):(p.rent>0?money(p.rent):"—");
  var pbox='<div class="d-price"><b>'+price+'</b><span>/'+t("mo")+'</span></div>';
  var cta=pbox+(p.type==="construction"?'<button class="btn ghost" id="dEdit">'+svg(I.edit)+'</button><button class="btn primary" id="dPay">'+t("makePay")+'</button>':'<button class="btn ghost" id="dInv">'+svg(I.doc)+'</button><button class="btn primary" id="dPay">'+t("makePay")+'</button>');
- el("detail").innerHTML='<div class="d-scroll"><div class="d-hero hasimg" style="background-image:url(\''+pic(p)+'\')"><div class="d-icbtn d-back" id="dBack">'+svg(I.back,2.2)+'</div><div class="d-icbtn d-cam" id="dCam">'+svg(I.cam)+'</div></div>'+body+'</div><div class="d-cta">'+cta+'</div>';
+ el("detail").innerHTML='<div class="d-scroll"><div class="d-hero hasimg" style="background-image:url(\''+pic(p)+'\')"><div class="d-icbtn d-back" id="dBack">'+svg(I.back,2.2)+'</div><div class="d-icbtn d-edit" id="dEditTop">'+svg(I.edit)+'</div><div class="d-icbtn d-cam" id="dCam">'+svg(I.cam)+'</div></div>'+body+'</div><div class="d-cta">'+cta+'</div>';
  el("dBack").onclick=closeDetail;el("dCam").onclick=function(){uploadImage(p,"wall");};
  var pay=el("dPay");if(pay)pay.onclick=function(){p.type==="construction"?recordInstallment(p):recordPayment(p);};
  var inv=el("dInv");if(inv)inv.onclick=function(){invoiceSheet(p.id);};
+ el("dEditTop").onclick=function(){editObjectSheet(p);};var de=el("dEdit");if(de)de.onclick=function(){editObjectSheet(p);};
  wireDetail(p);
 }
 function detailHead(p,desc,amen){
@@ -1009,14 +1029,14 @@ function detailRented(p){
   +'</div>';
 }
 function detailConstruction(p){
- var paidSum=0,paidN=0;p.periods.forEach(function(x){if(x.paid){paidSum+=x.amount;paidN++;}});var pct=Math.round(paidSum/p.dealAmount*100);
+ var paidN=0;p.periods.forEach(function(x){if(x.paid)paidN++;});var paidSum=paidTotalOf(p),rem=remainingOf(p);var pct=p.dealAmount>0?Math.max(0,Math.min(100,Math.round(paidSum/p.dealAmount*100))):0;
  var rows=p.periods.map(function(x,i){return '<div class="prow" data-per="'+i+'"><div class="pdot '+(x.paid?"":"wait")+'"></div><div class="pm">'+t("period")+' '+(i+1)+'<div class="ps">'+x.date+'</div></div><div class="pv">'+money(x.amount)+'</div></div>';}).join("");
  var desc=p.note||(t("firstInst")+": "+p.firstInst+" · "+paidN+" / "+p.periods.length);
  return '<div class="d-body">'+detailHead(p,desc,'')
-  +'<div class="card" style="margin-bottom:6px;"><div style="display:flex;justify-content:space-between;font-size:13px;font-weight:700;"><span>'+t("totalInst")+'</span><span>'+money(paidSum)+' / '+money(p.dealAmount)+'</span></div><div class="progress"><i style="width:'+pct+'%"></i></div><div style="font-size:11px;color:var(--muted);">'+paidN+' / '+p.periods.length+'</div></div>'
+  +'<div class="card" style="margin-bottom:6px;"><div style="display:flex;justify-content:space-between;font-size:13px;font-weight:700;"><span>'+t("totalInst")+'</span><span>'+money(paidSum)+' / '+money(p.dealAmount)+'</span></div><div class="progress"><i style="width:'+pct+'%"></i></div><div style="font-size:11px;color:var(--muted);">'+paidN+' / '+p.periods.length+'</div><div class="remain" data-f="remaining"><span>'+t("remaining")+'</span><b>'+money(rem)+'</b></div></div>'
   +'<h4 class="dh">'+t("factsTitle")+'</h4><div class="facts">'
   +factRow(t("area"),(p.area||"—")+' '+t("m2"))+factRow(t("marketPrice"),money(p.market),"market")+factRow(t("payback"),objPayback(p)+"%")
-  +factRow(t("dealAmount"),money(p.dealAmount),"dealAmount")+factRow(t("monthly"),money(p.monthly),"monthly")+factRow(t("firstInst"),p.firstInst,"firstInst")+'</div>'
+  +factRow(t("dealAmount"),money(p.dealAmount),"dealAmount")+factRow(t("paidSoFar"),money(paidSum))+factRow(t("remaining"),money(rem),"remaining")+factRow(t("monthly"),money(p.monthly),"monthly")+factRow(t("firstInst"),p.firstInst,"firstInst")+'</div>'
   +'<h4 class="dh">'+t("uploadComplex")+'</h4><div class="complex-ph" id="cph" '+(p.complex?'style="background-image:url('+p.complex+')"':"")+'>'+(p.complex?"":svg(I.cam)+t("uploadComplex"))+'</div>'
   +'<h4 class="dh">'+t("editPeriods")+'</h4><div class="card periods" style="padding:4px 16px;">'+rows+'</div>'
   +'<button class="obj-del" id="objDel">'+svg(I.trash)+' '+t("deleteObject")+'</button>'
@@ -1089,6 +1109,8 @@ function editPeriod(p,i){var x=p.periods[i];
  el("perSave").onclick=function(){x.date=el("perDate").value;x.amount=parseFloat(el("perAmt").value)||x.amount;x.paid=pd;closeSheet();renderDetail();save();};
 }
 function editField(p,key){
+ if(key==="remaining"){openSheet(t("remaining"),'<div class="fld"><label>'+t("remaining")+' (€)</label><input type="number" inputmode="decimal" id="fv" value="'+remainingOf(p)+'"><div class="hint">'+t("remainingHint")+'</div></div><button class="sh-save" id="fS">'+t("save")+'</button>');
+  el("fS").onclick=function(){var v=el("fv").value;p.paidBefore=v===""?0:(p.dealAmount||0)-instPaid(p)-(parseFloat(v)||0);closeSheet();renderDetail();renderHome();save();};return;}
  var L={purchase:t("purchasePrice"),market:t("marketPrice"),rent:t("rentMo"),dealAmount:t("dealAmount"),monthly:t("monthly"),firstInst:t("firstInst")};
  var isText=key==="firstInst";openSheet(L[key]||key,fld(L[key]||key,isText?"text":"number","fv",p[key])+'<button class="sh-save" id="fS">'+t("save")+'</button>');
  el("fS").onclick=function(){var v=el("fv").value;p[key]=isText?v:(parseFloat(v)||0);closeSheet();renderDetail();renderHome();};
@@ -1165,25 +1187,53 @@ function editShareholder(i){var x=i>=0?S.shareholders[i]:{name:"",share:0,divPct
 
 /* add object */
 var newType="flat";
-function addObjectSheet(){newType="flat";openSheet(t("addObject"),objForm());wireObjForm();}
+var editP=null;
+function addObjectSheet(){editP=null;newType="flat";openSheet(t("addObject"),objForm());wireObjForm();}
+function editObjectSheet(p){editP=p;newType=p.type;openSheet(t("editObject"),objForm());wireObjForm();}
 function objForm(){
- var types=[["flat",t("apartments"),I.home],["parking",t("parking"),I.car],["construction",t("construction"),I.crane]];
- var sel='<label style="font-size:12px;font-weight:700;color:var(--muted);display:block;margin-bottom:7px;">'+t("type")+'</label><div class="typesel">'+types.map(function(x){return '<div class="ty '+(newType===x[0]?"on":"")+'" data-ty="'+x[0]+'">'+svg(x[2])+'<span>'+x[1]+'</span></div>';}).join("")+'</div>';
- var common=fld(t("title"),"text","o_title","")+'<div class="fld2">'+inl(t("district"),"text","o_district")+inl(t("address"),"text","o_addr")+'</div>';
+ var e=editP,types=[["flat",t("apartments"),I.home],["parking",t("parking"),I.car],["construction",t("construction"),I.crane]];
+ if(e)types=types.filter(function(x){return e.type==="construction"?x[0]==="construction":x[0]!=="construction";});
+ var sel=types.length>1?'<label style="font-size:12px;font-weight:700;color:var(--muted);display:block;margin-bottom:7px;">'+t("type")+'</label><div class="typesel" style="grid-template-columns:repeat('+types.length+',1fr);">'+types.map(function(x){return '<div class="ty '+(newType===x[0]?"on":"")+'" data-ty="'+x[0]+'">'+svg(x[2])+'<span>'+x[1]+'</span></div>';}).join("")+'</div>':'';
+ function v(k){return e?e[k]:"";}
+ var common=fld(t("title"),"text","o_title",v("title"))+'<div class="fld2">'+inl(t("district"),"text","o_district",v("district"))+inl(t("address"),"text","o_addr",v("addr"))+'</div>';
  var extra;
- if(newType==="construction")extra='<div class="fld2">'+inl(t("dealAmount"),"number","o_deal")+inl(t("monthly"),"number","o_monthly")+'</div><div class="fld2">'+inl(t("firstInst")+" ("+t("dateFmt")+")","text","o_first")+inl(t("marketPrice"),"number","o_market")+'</div>';
- else extra='<div class="fld2">'+inl(t("m2"),"number","o_area")+inl(t("rentMo"),"number","o_rent")+'</div><div class="fld2">'+inl(t("purchasePrice"),"number","o_purchase")+inl(t("marketPrice"),"number","o_market")+'</div><div class="fld2">'+inl(t("leaseStart")+" ("+t("dateFmt")+")","text","o_start")+inl(t("payDay"),"number","o_day")+'</div><div class="fld2">'+inl(t("fullName"),"text","o_tn")+inl(t("citizenship"),"text","o_tc")+'</div>';
- return sel+common+extra+'<button class="sh-save" id="objSave">'+t("save")+'</button>';
+ if(newType==="construction")extra='<div class="fld2">'+inl(t("dealAmount"),"number","o_deal",v("dealAmount"))+inl(t("monthly"),"number","o_monthly",v("monthly"))+'</div><div class="fld2">'+inl(t("firstInst")+" ("+t("dateFmt")+")","text","o_first",v("firstInst"))+inl(t("marketPrice"),"number","o_market",v("market"))+'</div><div class="fld2">'+inl(t("m2"),"number","o_area",v("area"))+inl(t("remaining"),"number","o_remain",e?remainingOf(e):"")+'</div><div style="font-size:11px;color:var(--muted);margin:-6px 0 14px;line-height:1.4;">'+t("remainingHint")+'</div>';
+ else{var tn=e&&e.tenant&&e.status==="ok"?e.tenant:{name:"",citizenship:""};extra='<div class="fld2">'+inl(t("m2"),"number","o_area",v("area"))+inl(t("rentMo"),"number","o_rent",v("rent"))+'</div><div class="fld2">'+inl(t("purchasePrice"),"number","o_purchase",v("purchase"))+inl(t("marketPrice"),"number","o_market",v("market"))+'</div><div class="fld2">'+inl(t("leaseStart")+" ("+t("dateFmt")+")","text","o_start",v("startDate"))+inl(t("payDay"),"number","o_day",v("payDay"))+'</div><div class="fld2">'+inl(t("fullName"),"text","o_tn",tn.name)+inl(t("citizenship"),"text","o_tc",tn.citizenship)+'</div>';}
+ return sel+common+extra+'<div id="o_err" style="color:var(--red);font-size:12px;font-weight:700;margin:-4px 0 10px;display:none;"></div><button class="sh-save" id="objSave">'+t("save")+'</button>';
 }
-function inl(label,type,id){return '<div class="fld"><label>'+label+'</label><input type="'+type+'" id="'+id+'"></div>';}
+function inl(label,type,id,val){return '<div class="fld"><label>'+label+'</label><input type="'+type+'" id="'+id+'"'+(type==="number"?' inputmode="decimal"':'')+(val==null||val===""?'':' value="'+esc(val)+'"')+'></div>';}
+function num(id){var x=el(id);return x?parseFloat(String(x.value).replace(",",".")):NaN;}
+function objErr(msg){var b=el("o_err");b.textContent=msg;b.style.display="block";}
 function wireObjForm(){
  el("shBody").querySelectorAll("[data-ty]").forEach(function(x){x.onclick=function(){newType=this.getAttribute("data-ty");el("shBody").innerHTML=objForm();wireObjForm();};});
- el("objSave").onclick=function(){var id=Math.max.apply(null,[0].concat(S.props.map(function(p){return p.id;})))+1;
-  var title=el("o_title").value||(newType==="parking"?t("parking"):newType==="construction"?t("construction"):t("apartments"));
-  var district=el("o_district").value||"Chișinău";var addr=el("o_addr").value||district;
-  if(newType==="construction"){var deal=parseFloat(el("o_deal").value)||0,mon=parseFloat(el("o_monthly").value)||0,first=el("o_first").value||("01."+pad(CUR_M)+"."+CUR_Y);S.props.push({id:id,type:"construction",title:title,district:district,addr:addr,area:parseFloat(el("o_area")?el("o_area").value:0)||0,purchase:deal,market:parseFloat(el("o_market").value)||deal,status:"build",dealAmount:deal,monthly:mon,firstInst:first,periods:buildPeriods(first,mon,mon>0?Math.max(1,Math.round(deal/mon)):1,0),wall:null,complex:null});}
-  else{var rent=parseFloat(el("o_rent").value)||0,start=el("o_start").value||(pad(DEMO_DAY)+"."+pad(CUR_M)+"."+CUR_Y),tn=el("o_tn").value.trim();S.props.push(mkRent({id:id,type:newType,title:title,district:district,addr:addr,area:parseFloat(el("o_area").value)||0,rent:rent,purchase:parseFloat(el("o_purchase").value)||0,market:parseFloat(el("o_market").value)||0,status:tn?"ok":"no",tn:tn,tc:el("o_tc").value.trim(),utils:false,repair:false,start:start,payDay:parseInt(el("o_day").value)||5}));}
-  closeSheet();renderAll();go("props");openDetail(id);
+ el("objSave").onclick=function(){
+  var e=editP,title=el("o_title").value.trim()||(e?e.title:(newType==="parking"?t("parking"):newType==="construction"?t("construction"):t("apartments")));
+  var district=el("o_district").value.trim()||(e?e.district:"Chișinău");var addr=el("o_addr").value.trim()||(e?e.addr:district);
+  if(newType==="construction"){
+   var deal=num("o_deal")||0,mon=num("o_monthly")||0,first=el("o_first").value.trim(),remRaw=el("o_remain").value.trim(),remIn=remRaw===""?null:(parseFloat(remRaw.replace(",","."))||0);
+   if(first&&!isDate(first))return objErr(t("dateErr"));
+   if(!e){first=first||("01."+pad(CUR_M)+"."+CUR_Y);var before=remIn==null?0:deal-remIn,rem=Math.max(0,deal-before);
+    var id=Math.max.apply(null,[0].concat(S.props.map(function(p){return p.id;})))+1;
+    S.props.push({id:id,type:"construction",title:title,district:district,addr:addr,area:num("o_area")||0,purchase:deal,market:num("o_market")||deal,status:"build",dealAmount:deal,monthly:mon,firstInst:first,paidBefore:before,periods:planPeriods(first,mon,rem,0),wall:null,complex:null});
+    closeSheet();renderAll();go("props");openDetail(id);return;}
+   var oldRem=remainingOf(e),changed=deal!==e.dealAmount||mon!==e.monthly||(first&&first!==e.firstInst)||(remIn!=null&&Math.abs(remIn-oldRem)>0.005);
+   if(e.purchase===e.dealAmount||!e.purchase)e.purchase=deal;
+   e.title=title;e.district=district;e.addr=addr;e.area=num("o_area")||0;e.market=isNaN(num("o_market"))?e.market:num("o_market");
+   e.dealAmount=deal;e.monthly=mon;if(first)e.firstInst=first;
+   if(remIn!=null&&Math.abs(remIn-oldRem)>0.005)e.paidBefore=deal-instPaid(e)-remIn;
+   if(changed){var paid=e.periods.filter(function(x){return x.paid;});e.periods=paid.concat(planPeriods(e.firstInst,mon,remainingOf(e),paid.length));}
+  }else{
+   var start=el("o_start").value.trim(),tn=el("o_tn").value.trim(),tc=el("o_tc").value.trim();
+   if(start&&!isDate(start))return objErr(t("dateErr"));
+   var day=parseInt(el("o_day").value);day=day>=1&&day<=31?day:(e?e.payDay:5);
+   if(!e){var nid=Math.max.apply(null,[0].concat(S.props.map(function(p){return p.id;})))+1;
+    S.props.push(mkRent({id:nid,type:newType,title:title,district:district,addr:addr,area:num("o_area")||0,rent:num("o_rent")||0,purchase:num("o_purchase")||0,market:num("o_market")||0,status:tn?"ok":"no",tn:tn,tc:tc,utils:false,repair:false,start:start||(pad(DEMO_DAY)+"."+pad(CUR_M)+"."+CUR_Y),payDay:day}));
+    closeSheet();renderAll();go("props");openDetail(nid);return;}
+   e.type=newType;e.title=title;e.district=district;e.addr=addr;e.area=num("o_area")||0;e.rent=num("o_rent")||0;e.purchase=num("o_purchase")||0;e.market=num("o_market")||0;e.payDay=day;
+   if(start){e.startDate=start;if(!e.pay)e.pay={};for(var y=syOf(e);y<=CUR_Y;y++){if(!e.pay[y])e.pay[y]={};}}
+   if(tn){e.tenant={name:tn,citizenship:tc};e.status="ok";}else{e.tenant=null;e.status="no";}
+  }
+  editP=null;closeSheet();renderAll();
  };
 }
 
@@ -1215,6 +1265,7 @@ function settingsSheet(){var langs=[["ro","Română"],["en","English"],["ru","Р
  openSheet(t("settings"),
   '<div class="opt"><div class="oi">'+svg(I.globe)+'</div><div class="ol"><b>'+t("language")+'</b></div><div class="seg" id="langSeg">'+langs.map(function(l){return '<button data-l="'+l[0]+'" class="'+(S.lang===l[0]?"on":"")+'">'+l[0].toUpperCase()+'</button>';}).join("")+'</div></div>'
   +'<div class="opt"><div class="oi">'+svg(I.sun)+'</div><div class="ol"><b>'+t("theme")+'</b></div><div class="seg" id="thSeg"><button data-th="light" class="'+(S.theme==="light"?"on":"")+'">'+t("light")+'</button><button data-th="dark" class="'+(S.theme==="dark"?"on":"")+'">'+t("dark")+'</button></div></div>'
+  +'<div class="opt"><div class="oi">'+svg(I.coins)+'</div><div class="ol" id="rateEdit"><b>'+t("rate")+'</b><span>1 € = '+rateTxt()+' L'+(S.rateDate?' · '+esc(S.rateDate):'')+'</span></div><div class="ar" style="color:var(--gold);cursor:pointer;width:34px;height:34px;display:flex;align-items:center;justify-content:center;" id="rateEdit2"><span style="width:18px;height:18px;display:flex;">'+svg(I.edit)+'</span></div></div>'
   +'<div class="opt"><div class="oi">'+svg(I.bell)+'</div><div class="ol"><b>'+t("notifOn")+'</b></div><div class="sw '+(S.notif===false?"":"on")+'" id="notifSw"></div></div>'
   +'<button class="sh-save" id="expBtn" style="margin-top:6px;">Export JSON</button>'
   +'<button class="sh-cancel" id="impBtn" style="margin-top:8px;">Import JSON (file)</button><input type="file" id="impFile" accept=".json,application/json" style="display:none">'
@@ -1222,6 +1273,7 @@ function settingsSheet(){var langs=[["ro","Română"],["en","English"],["ru","Р
  el("langSeg").querySelectorAll("button").forEach(function(b){b.onclick=function(){S.lang=this.getAttribute("data-l");document.documentElement.lang=S.lang;renderAll();settingsSheet();};});
  el("thSeg").querySelectorAll("button").forEach(function(b){b.onclick=function(){S.theme=this.getAttribute("data-th");document.documentElement.setAttribute("data-theme",S.theme);save();settingsSheet();};});
  el("notifSw").onclick=function(){S.notif=(S.notif===false);this.classList.toggle("on",S.notif!==false);save();};
+ el("rateEdit").onclick=el("rateEdit2").onclick=function(){rateSheet(settingsSheet);};
  el("expBtn").onclick=exportData;
  el("impBtn").onclick=function(){el("impFile").click();};
  el("impFile").onchange=function(){if(this.files&&this.files[0])importData(this.files[0]);};
