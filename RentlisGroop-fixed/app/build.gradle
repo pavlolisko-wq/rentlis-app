@@ -9,13 +9,34 @@ android {
         applicationId "md.rentlis.groop"
         minSdk 26
         targetSdk 34
-        versionCode 1
-        versionName "1.5"
+        // В CI versionCode растёт с каждой сборкой (номер запуска GitHub Actions),
+        // поэтому новый APK всегда ставится поверх старого как обновление.
+        versionCode((System.getenv("GITHUB_RUN_NUMBER") ?: "1").toInteger() + 100)
+        versionName "1.6"
+    }
+    // Постоянный ключ подписи. CI кладёт его в rentlis.jks из секрета KEYSTORE_BASE64.
+    // Один и тот же ключ = Android принимает APK как обновление (данные сохраняются).
+    def rentlisKs = rootProject.file("rentlis.jks")
+    def rentlisPass = System.getenv("KEYSTORE_PASSWORD")
+    def hasRentlisKey = rentlisKs.exists() && rentlisPass
+    if (hasRentlisKey) {
+        signingConfigs {
+            rentlis {
+                storeFile rentlisKs
+                storePassword rentlisPass
+                keyAlias "rentlis"
+                keyPassword rentlisPass
+            }
+        }
     }
     buildTypes {
+        debug {
+            if (hasRentlisKey) signingConfig signingConfigs.rentlis
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            if (hasRentlisKey) signingConfig signingConfigs.rentlis
         }
     }
     compileOptions {
